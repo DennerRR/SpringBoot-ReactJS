@@ -1,5 +1,7 @@
 package com.denner.minhasfinancas.model.entity;
 
+import com.denner.minhasfinancas.model.enums.StatusLancamento;
+import com.denner.minhasfinancas.model.enums.TipoLancamento;
 import lombok.*;
 
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
@@ -11,12 +13,6 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "lancamento", schema = "financas")
-@Getter
-@Setter
-@EqualsAndHashCode
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
 @Data
 public class Lancamento {
