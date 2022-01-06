@@ -1,6 +1,5 @@
 package com.denner.minhasfinancas.model.repository;
 
-import com.denner.minhasfinancas.model.UsuarioRepository;
 import com.denner.minhasfinancas.model.entity.Usuario;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;

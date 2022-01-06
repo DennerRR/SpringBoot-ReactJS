@@ -1,4 +1,4 @@
-package com.denner.minhasfinancas.model;
+package com.denner.minhasfinancas.model.repository;
 
 import com.denner.minhasfinancas.model.entity.Lancamento;
 import org.springframework.data.jpa.repository.JpaRepository;
