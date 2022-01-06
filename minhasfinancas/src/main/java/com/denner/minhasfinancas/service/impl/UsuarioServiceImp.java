@@ -7,6 +7,8 @@ import com.denner.minhasfinancas.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 @Service
 public class UsuarioServiceImp implements UsuarioService {
 
@@ -24,8 +26,11 @@ public class UsuarioServiceImp implements UsuarioService {
     }
 
     @Override
+    @Transactional
     public Usuario salvarUsuario(Usuario usuario) {
-        return null;
+        validarEmail(usuario.getEmail());
+        return repository.save(usuario);
+
     }
 
     @Override

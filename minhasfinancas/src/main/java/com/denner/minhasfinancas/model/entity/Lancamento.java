@@ -15,6 +15,8 @@ import java.time.LocalDate;
 @Table(name = "lancamento", schema = "financas")
 @Builder
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Lancamento {
 
     @Id
