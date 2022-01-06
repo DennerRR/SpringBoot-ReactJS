@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -21,14 +22,30 @@ import java.util.Optional;
 @ActiveProfiles("teste")
 public class UsuarioServiceTest {
 
-    UsuarioService service;
+    @SpyBean
+    UsuarioServiceImp service;
 
     @MockBean
     UsuarioRepository repository;
 
-    @Before
-    public void setUp(){
-        service = new UsuarioServiceImp(repository);
+
+    @Test(expected = Test.None.class)
+    public void deveSalvarUmUsuario(){
+        // cenário
+        Mockito.doNothing().when(service).validarEmail(Mockito.anyString());
+        Usuario usuario = Usuario.builder().id(1l).nome("nome").email("email@email.com").senha("senha").build();
+
+        Mockito.when(repository.save(Mockito.any(Usuario.class))).thenReturn(usuario);
+
+        // acao
+        Usuario usuarioSalvo = service.salvarUsuario(new Usuario());
+
+        //verificaçao
+        Assertions.assertThat(usuarioSalvo).isNotNull();
+        Assertions.assertThat(usuarioSalvo.getId()).isEqualTo(1l);
+        Assertions.assertThat(usuarioSalvo.getNome()).isEqualTo("nome");
+        Assertions.assertThat(usuarioSalvo.getEmail()).isEqualTo("email@email.com");
+        Assertions.assertThat(usuarioSalvo.getSenha()).isEqualTo("senha");
     }
 
     @Test(expected = Test.None.class)
