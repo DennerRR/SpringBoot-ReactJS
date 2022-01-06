@@ -1,5 +1,6 @@
 package com.denner.minhasfinancas.model.service;
 
+import com.denner.minhasfinancas.exception.ErroAutenticacao;
 import com.denner.minhasfinancas.exception.RegraNegocioException;
 import com.denner.minhasfinancas.model.entity.Usuario;
 import com.denner.minhasfinancas.model.repository.UsuarioRepository;
@@ -45,6 +46,31 @@ public class UsuarioServiceTest {
 
         // verificação
         Assertions.assertThat(result).isNotNull();
+    }
+
+    @Test
+    public void deveLancarErroQuandoNaoEncontrarUsuarioCadastradoComEmailInformado(){
+        // cenário
+        Mockito.when(repository.findByEmail(Mockito.anyString())).thenReturn(Optional.empty());
+
+        // acao
+        Throwable exception = Assertions.catchThrowable(()->service.autenticar("email@email.com", "senha"));
+
+        Assertions.assertThat(exception).isInstanceOf(ErroAutenticacao.class).hasMessage("Usuário não encontrado para o email informado.");
+    }
+    @Test
+    public void deveLancarErroQuandoSenhaNaoBater(){
+        // cenário
+        String senha = "senha";
+        Usuario usuario = Usuario.builder().email("email@email.com").senha(senha).build();
+        Mockito.when(repository.findByEmail(Mockito.anyString())).thenReturn(Optional.of(usuario));
+
+        // ação
+
+
+        Throwable exception = Assertions.catchThrowable(() -> service.autenticar("email@email.com","123"));
+        Assertions.assertThat(exception).isInstanceOf(ErroAutenticacao.class).hasMessage("Senha inválida.");
+
     }
 
     @Test(expected = Test.None.class)
