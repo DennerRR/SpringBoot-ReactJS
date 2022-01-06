@@ -1,28 +1,52 @@
 package com.denner.minhasfinancas.model.service;
 
 import com.denner.minhasfinancas.exception.RegraNegocioException;
+import com.denner.minhasfinancas.model.entity.Usuario;
 import com.denner.minhasfinancas.model.repository.UsuarioRepository;
 import com.denner.minhasfinancas.service.UsuarioService;
 import com.denner.minhasfinancas.service.impl.UsuarioServiceImp;
+import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.Optional;
 
 @RunWith(SpringRunner.class)
 @ActiveProfiles("teste")
 public class UsuarioServiceTest {
 
     UsuarioService service;
+
+    @MockBean
     UsuarioRepository repository;
 
     @Before
     public void setUp(){
-        repository = Mockito.mock(UsuarioRepository.class);
         service = new UsuarioServiceImp(repository);
     }
+
+    @Test(expected = Test.None.class)
+    public void deveAutenticarUmUsuarioComSucesso(){
+        // cenário
+        String email = "email@email.com";
+        String senha = "senha";
+
+        Usuario usuario = Usuario.builder().email(email).senha(senha).id(1l).build();
+        Mockito.when(repository.findByEmail(email)).thenReturn(Optional.of(usuario));
+
+        // acao
+
+        Usuario result = service.autenticar(email, senha);
+
+        // verificação
+        Assertions.assertThat(result).isNotNull();
+    }
+
     @Test(expected = Test.None.class)
     public void deveValidarEmail(){
         // cenário
