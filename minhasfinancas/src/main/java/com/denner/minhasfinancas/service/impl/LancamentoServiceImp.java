@@ -15,6 +15,7 @@ import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class LancamentoServiceImp implements LancamentoService {
@@ -85,5 +86,10 @@ public class LancamentoServiceImp implements LancamentoService {
         if(lancamento.getTipo() == null){
             throw new RegraNegocioException("Informe um tipo de lançamento.");
         }
+    }
+
+    @Override
+    public Optional<Lancamento> obterPorId(Long id) {
+        return repository.findById(id);
     }
 }

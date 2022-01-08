@@ -11,6 +11,7 @@ import com.denner.minhasfinancas.service.LancamentoService;
 import com.denner.minhasfinancas.service.UsuarioService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,12 +30,34 @@ public class LancamentoResource {
         this.service = service;
     }
 
-    @PostMapping
+    @PostMapping("/salvar")
     @ApiOperation(value = "Salvar um lancamento")
     public ResponseEntity salvar(@RequestBody LancamentoDTO dto){
-        return null;
+        try {
+            Lancamento entidade = converter(dto);
+            entidade = service.salvar(entidade);
+            return new ResponseEntity(entidade, HttpStatus.CREATED);
+        }catch (RegraNegocioException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+
+        }
     }
 
+    @PutMapping("/atualizar/{id}")
+    @ApiOperation(value = "Atualizar um lancamento")
+    public ResponseEntity atualizar(@PathVariable("id") Long id, @RequestBody LancamentoDTO dto){
+        return service.obterPorId(id).map(entity -> {
+            try {
+                Lancamento lancamento = converter(dto);
+                lancamento.setId(entity.getId());
+                service.atualizar(lancamento);
+                return ResponseEntity.ok(lancamento);
+            }catch (RegraNegocioException e){
+                return ResponseEntity.badRequest().body(e.getMessage());
+
+            }
+            }).orElseGet(() -> new ResponseEntity ("Lancamento não encontrado na base de dados", HttpStatus.BAD_REQUEST));
+    }
     private Lancamento converter(LancamentoDTO dto){
         Lancamento lancamento = new Lancamento();
         lancamento.setId(dto.getId());
