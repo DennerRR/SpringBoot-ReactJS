@@ -6,6 +6,7 @@ import com.denner.minhasfinancas.model.enums.StatusLancamento;
 import java.util.List;
 
 public interface LancamentoService {
+
     Lancamento salvar(Lancamento lancamento);
     Lancamento atualizar(Lancamento lancamento);
     void deletar(Lancamento lancamento);

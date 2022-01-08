@@ -9,9 +9,10 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Objects;
 
 @Service
-public class LancamentoServiceImp extends LancamentoService {
+public class LancamentoServiceImp implements LancamentoService {
 
 
     private LancamentoRepository repository;
@@ -28,13 +29,16 @@ public class LancamentoServiceImp extends LancamentoService {
     }
 
     @Override
+    @Transactional
     public Lancamento atualizar(Lancamento lancamento) {
-        return null;
+        Objects.requireNonNull(lancamento.getId());
+        return repository.save(lancamento);
     }
 
     @Override
     public void deletar(Lancamento lancamento) {
-
+        Objects.requireNonNull(lancamento.getId());
+        repository.delete(lancamento);
     }
 
     @Override
@@ -44,6 +48,7 @@ public class LancamentoServiceImp extends LancamentoService {
 
     @Override
     public void atualizarStatus(Lancamento lancamento, StatusLancamento status) {
-
+        lancamento.setStatus(status);
+        atualizar(lancamento);
     }
 }
