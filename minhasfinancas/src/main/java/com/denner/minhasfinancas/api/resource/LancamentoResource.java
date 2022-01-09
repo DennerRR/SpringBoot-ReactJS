@@ -58,6 +58,16 @@ public class LancamentoResource {
             }
             }).orElseGet(() -> new ResponseEntity ("Lancamento não encontrado na base de dados", HttpStatus.BAD_REQUEST));
     }
+
+    @DeleteMapping("/deletar/{id}")
+    @ApiOperation(value = "deletar um lancamento por id")
+    public ResponseEntity deletar(@PathVariable("id") Long id){
+        return service.obterPorId(id).map(entidade ->{
+            service.deletar(entidade);
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
+        }).orElseGet(() -> new ResponseEntity("Lancamento não encontrado na base de dados", HttpStatus.BAD_REQUEST));
+    }
+
     private Lancamento converter(LancamentoDTO dto){
         Lancamento lancamento = new Lancamento();
         lancamento.setId(dto.getId());
