@@ -11,6 +11,7 @@ import com.denner.minhasfinancas.service.LancamentoService;
 import com.denner.minhasfinancas.service.UsuarioService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,14 +25,12 @@ import java.util.Optional;
 
 //Liberar todos domínios para acessar essa API
 @CrossOrigin(origins = "*")
+@RequiredArgsConstructor
 public class LancamentoResource {
 
-    private LancamentoService service;
-    private UsuarioService usuarioService;
+    private final LancamentoService service;
+    private final UsuarioService usuarioService;
 
-    public LancamentoResource(LancamentoService service){
-        this.service = service;
-    }
 
     @GetMapping("/buscar")
     public ResponseEntity buscar(@RequestParam (value = "descricao", required = false) String descricao,
