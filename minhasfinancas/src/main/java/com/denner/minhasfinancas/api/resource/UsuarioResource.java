@@ -7,6 +7,7 @@ import com.denner.minhasfinancas.model.entity.Usuario;
 import com.denner.minhasfinancas.service.UsuarioService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,15 +18,12 @@ import org.springframework.web.bind.annotation.*;
 
 //Liberar todos domínios para acessar essa API
 @CrossOrigin(origins = "*")
+@RequiredArgsConstructor
 public class UsuarioResource {
 
 
-    private UsuarioService service;
+    private final UsuarioService service;
 
-    public UsuarioResource(UsuarioService service){
-        this.service = service;
-
-    }
     @PostMapping("/salvar")
     @ApiOperation(value = "Salvar um usuario")
     public ResponseEntity salvar(@RequestBody UsuarioDTO dto){
