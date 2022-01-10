@@ -83,8 +83,9 @@ public class LancamentoResource {
             }
             }).orElseGet(() ->
                 new ResponseEntity("Lançamento não encontrado na base de Dados.", HttpStatus.BAD_REQUEST));
-
     }
+
+
     @PutMapping("/atualizar/{id}")
     @ApiOperation(value = "Atualizar um lancamento")
     public ResponseEntity atualizar(@PathVariable("id") Long id, @RequestBody LancamentoDTO dto){
