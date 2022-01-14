@@ -32,10 +32,27 @@ public class LancamentoRepositoryTest {
     @Test
     public void deveSalvarUmLancamento(){
         //cenário
-        Lancamento lancamento = Lancamento.builder().ano(2019).mes(1).descricao("Lancamento qualquer").valor(BigDecimal.valueOf(10)).tipo(TipoLancamento.RECEITA).status(StatusLancamento.PENDENTE).dataCadastro(LocalDate.now()).build();
+        Lancamento lancamento = criarLancamento();
 
         lancamento = repository.save(lancamento);
 
         Assertions.assertThat(lancamento.getId()).isNotNull();
+    }
+    private Lancamento criarLancamento(){
+        return Lancamento.builder().ano(2019).mes(1).descricao("Lancamento qualquer").valor(BigDecimal.valueOf(10)).tipo(TipoLancamento.RECEITA).status(StatusLancamento.PENDENTE).dataCadastro(LocalDate.now()).build();
+    }
+    @Test
+    public void  deveDeletarUmLancamento(){
+        Lancamento lancamento = criarLancamento();
+        entityManager.persist(lancamento);
+
+        lancamento = entityManager.find(Lancamento.class, lancamento.getId());
+
+        repository.delete(lancamento);
+
+        Lancamento lancamentoInexistente = entityManager.find(Lancamento.class, lancamento.getId());
+
+        Assertions.assertThat(lancamentoInexistente).isNull();
+        
     }
 }
