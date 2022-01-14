@@ -43,8 +43,7 @@ public class LancamentoRepositoryTest {
     }
     @Test
     public void  deveDeletarUmLancamento(){
-        Lancamento lancamento = criarLancamento();
-        entityManager.persist(lancamento);
+        Lancamento lancamento = criarEPersistirUmLancamento();
 
         lancamento = entityManager.find(Lancamento.class, lancamento.getId());
 
@@ -53,6 +52,27 @@ public class LancamentoRepositoryTest {
         Lancamento lancamentoInexistente = entityManager.find(Lancamento.class, lancamento.getId());
 
         Assertions.assertThat(lancamentoInexistente).isNull();
-        
+
+    }
+
+    private Lancamento criarEPersistirUmLancamento(){
+        Lancamento lancamento = criarLancamento();
+        entityManager.persist(lancamento);
+        return lancamento;
+    }
+    @Test
+    public void deveAtualizarUmLancamento(){
+        Lancamento lancamento = criarEPersistirUmLancamento();
+        lancamento.setAno(2018);
+        lancamento.setDescricao("Teste Atualizar");
+        lancamento.setStatus(StatusLancamento.CANCELADO);
+        repository.save(lancamento);
+
+        Lancamento lancamentoAtualizado = entityManager.find(Lancamento.class, lancamento.getId());
+
+        Assertions.assertThat(lancamentoAtualizado.getAno()).isEqualTo(2018);
+        Assertions.assertThat(lancamentoAtualizado.getDescricao()).isEqualTo("Teste Atualizar");
+        Assertions.assertThat(lancamentoAtualizado.getStatus()).isEqualTo(StatusLancamento.CANCELADO);
+
     }
 }
