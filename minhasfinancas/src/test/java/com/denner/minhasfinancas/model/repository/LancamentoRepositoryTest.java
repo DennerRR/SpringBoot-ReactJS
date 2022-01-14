@@ -16,6 +16,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Optional;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
@@ -74,5 +75,13 @@ public class LancamentoRepositoryTest {
         Assertions.assertThat(lancamentoAtualizado.getDescricao()).isEqualTo("Teste Atualizar");
         Assertions.assertThat(lancamentoAtualizado.getStatus()).isEqualTo(StatusLancamento.CANCELADO);
 
+    }
+
+    @Test
+    public void deveBuscarUmLancamentoPorId(){
+        Lancamento lancamento = criarEPersistirUmLancamento();
+
+        Optional<Lancamento> lancamentoEncontrado = repository.findById(lancamento.getId());
+        Assertions.assertThat(lancamentoEncontrado.isPresent()).isTrue();
     }
 }
