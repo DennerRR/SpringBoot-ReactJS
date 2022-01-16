@@ -13,8 +13,12 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.data.domain.Example;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.Arrays;
+import java.util.List;
 
 @RunWith(SpringRunner.class)
 @ActiveProfiles("test")
@@ -96,4 +100,19 @@ public class LancamentoServiceTest {
         Mockito.verify(repository, Mockito.never()).delete(lancamento);
 
     }
+    @Test
+    public void deveFiltrarLancamentos(){
+        // cenário
+        Lancamento lancamento = LancamentoRepositoryTest.criarLancamento();
+        lancamento.setId(1l);
+
+        List<Lancamento> lista = Arrays.asList(lancamento);
+        Mockito.when(repository.findAll(Mockito.any(Example.class)) ).thenReturn(lista);
+
+        List<Lancamento> resultado = service.buscar(lancamento);
+
+        Assertions.assertThat(resultado).isNotEmpty().hasSize(1).contains(lancamento);
+    }
+
+
 }
