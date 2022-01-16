@@ -26,12 +26,13 @@ public class LancamentoServiceTest {
     LancamentoRepository repository;
 
     @Test
-    public void deveSalvarUmLancamento(){
+    public void deveSalvarUmLancamento() {
         Lancamento lancamentoASalvar = LancamentoRepositoryTest.criarLancamento();
         Mockito.doNothing().when(service).validar(lancamentoASalvar);
 
         Lancamento lancamentoSalvo = LancamentoRepositoryTest.criarLancamento();
         lancamentoSalvo.setId(1l);
+        lancamentoSalvo.setStatus(StatusLancamento.PENDENTE);
         Mockito.when(repository.save(lancamentoASalvar)).thenReturn(lancamentoSalvo);
 
         Lancamento lancamento = service.salvar(lancamentoASalvar);
@@ -40,13 +41,31 @@ public class LancamentoServiceTest {
         Assertions.assertThat(lancamento.getId()).isEqualTo(lancamentoSalvo.getId());
         Assertions.assertThat(lancamento.getStatus()).isEqualTo(StatusLancamento.PENDENTE);
     }
+
     @Test
-    public void naoDeveSalvarUmLancamentoQuandoHouverErroDeValidacao(){
+    public void naoDeveSalvarUmLancamentoQuandoHouverErroDeValidacao() {
         Lancamento lancamentoASalvar = LancamentoRepositoryTest.criarLancamento();
         Mockito.doThrow(RegraNegocioException.class).when(service).validar(lancamentoASalvar);
 
-        Assertions.catchThrowableOfType(() ->service.salvar(lancamentoASalvar),RegraNegocioException.class);
+        Assertions.catchThrowableOfType(() -> service.salvar(lancamentoASalvar), RegraNegocioException.class);
 
-        Mockito.verify(repository,Mockito.never()).save(lancamentoASalvar);
+        Mockito.verify(repository, Mockito.never()).save(lancamentoASalvar);
+    }
+
+    @Test
+    public void deveAtualizarUmLancamento() {
+
+        Lancamento lancamentoSalvo = LancamentoRepositoryTest.criarLancamento();
+        lancamentoSalvo.setId(1l);
+        lancamentoSalvo.setStatus(StatusLancamento.PENDENTE);
+
+        Mockito.doNothing().when(service).validar(lancamentoSalvo);
+
+        Mockito.when(repository.save(lancamentoSalvo)).thenReturn(lancamentoSalvo);
+
+        service.atualizar(lancamentoSalvo);
+
+        // verificação
+        Mockito.verify(repository, Mockito.times(1)).save(lancamentoSalvo);
     }
 }
