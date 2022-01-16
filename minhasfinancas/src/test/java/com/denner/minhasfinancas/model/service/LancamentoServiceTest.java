@@ -19,6 +19,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @RunWith(SpringRunner.class)
 @ActiveProfiles("test")
@@ -130,5 +131,20 @@ public class LancamentoServiceTest {
         Mockito.verify(service).atualizar(lancamento);
 
     }
+
+    @Test
+    public void deveRetornarVazioQuandoOLancamentoNaoExiste(){
+        // cenário
+        Long id = 1l;
+        Lancamento lancamento = LancamentoRepositoryTest.criarLancamento();
+        lancamento.setId(id);
+
+        Mockito.when(repository.findById(id)).thenReturn(Optional.empty());
+
+        Optional<Lancamento> resultado = service.obterPorId(id);
+
+        Assertions.assertThat(resultado.isPresent()).isFalse();
+    }
+    
 
 }
