@@ -39,7 +39,7 @@ public class LancamentoRepositoryTest {
 
         assertThat(lancamento.getId()).isNotNull();
     }
-    private Lancamento criarLancamento(){
+    public static Lancamento criarLancamento(){
         return Lancamento.builder().ano(2019).mes(1).descricao("Lancamento qualquer").valor(BigDecimal.valueOf(10)).tipo(TipoLancamento.RECEITA).status(StatusLancamento.PENDENTE).dataCadastro(LocalDate.now()).build();
     }
     @Test
