@@ -2,6 +2,7 @@ package com.denner.minhasfinancas.resource;
 
 import com.denner.minhasfinancas.api.DTO.UsuarioDTO;
 import com.denner.minhasfinancas.api.resource.UsuarioResource;
+import com.denner.minhasfinancas.exception.ErroAutenticacao;
 import com.denner.minhasfinancas.model.entity.Usuario;
 import com.denner.minhasfinancas.service.LancamentoService;
 import com.denner.minhasfinancas.service.UsuarioService;
@@ -66,5 +67,27 @@ public class UsuarioResourceTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("nome").value(usuario.getNome()))
                 .andExpect(MockMvcResultMatchers.jsonPath("email").value(usuario.getEmail()));
     }
+    @Test
+    public void deveRetornarBadRequestAoObterErroDeAutenticacao() throws Exception{
+        // cenário
+        String email = "usuario@email.com";
+        String senha = "123";
 
+        UsuarioDTO dto = UsuarioDTO.builder().email(email).senha(senha).build();
+
+        Mockito.when(service.autenticar(email,senha)).thenThrow(ErroAutenticacao.class);
+
+        String json = new ObjectMapper().writeValueAsString(dto);
+
+        // execução e verificação
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .post(API.concat("/autenticar"))
+                .accept(JSON)
+                .contentType(JSON)
+                .content(json);
+
+        mvc.perform(request)
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
 }
