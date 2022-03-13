@@ -33,7 +33,7 @@ public class LancamentoResource {
     private final UsuarioService usuarioService;
 
 
-    @GetMapping("/buscar")
+    @GetMapping
     public ResponseEntity buscar(@RequestParam (value = "descricao", required = false) String descricao,
                                  @RequestParam (value = "mes", required = false) Integer mes,
                                  @RequestParam(value = "ano", required = false) Integer ano,
